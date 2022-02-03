@@ -141,7 +141,44 @@ gtsummary 패키지에는 **add_()** 함수를 이용하여 테이블에 통계 
 - add_stat() : 사용자 지정 함수 추가
 - add_q() : 다중 비교를 위한 q-value 추가
 
-**add_()**함수를 이용하여 앞에서 만든 table에 여러 통계량을 추가해보자.
+**add_p()** 함수를 사용하여 `tbl_summary`에 의해 생성된 테이블에 p-value를 추가할 수 있다. 이때 test 인자에 수행할 통계 테스트를 지정할 수 있다. 또한 사용자 정의 테스트 함수는 모든 변수 또는 일부 변수에 대해 추가할 수 있다.
+(기본값: 연속형 변수- "kruskal.test", 범주형 변수- 행의 수가 5 이상인 경우 "chisq.test", 5 미만인 경우 "fisher.test" )
+형식은 ~ 
+
+
+1) 연속형 변수 - **"t.test"**, **"wilcox.test"** 
+
+```{r, echo=T}
+dt2 %>% 
+  tbl_summary(by=Q_PHX_DX_STK) %>% 
+  add_p(HGHT~"t.test")
+```
+
+```{r, echo=T}
+dt2 %>% 
+  tbl_summary(by=Q_PHX_DX_STK) %>% 
+  add_p(all_continuous()~"wilcox.test")
+```
+
+
+2) 범주형 변수 - **"chisq.test"**, **"fisher.test"**
+
+```{r, echo=T}
+dt2 %>% 
+  tbl_summary(by=Q_PHX_DX_STK) %>% 
+  add_p(all_categorical()~"chisq.test")
+```
+
+```{r, echo=T}
+dt2 %>% 
+  tbl_summary(by=Q_PHX_DX_STK) %>% 
+  add_p(all_categorical()~"fisher.test")
+```
+
+
+
+다양한 **add_()**함수를 이용하여 앞에서 만든 table에 여러 통계량을 추가해보자.
+
 
 ```{r, echo=T}
 dt2 %>% 
