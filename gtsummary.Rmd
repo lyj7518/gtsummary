@@ -83,7 +83,6 @@ dt2 %>% tbl_summary()
 ```
 
 
-
 - 변수 유형이 자동으로 구분되어 연속형 변수는 median(IQR), 범주형 변수는 n(%)의 형태로 출력된 것을 볼 수 있다.
 
 
@@ -93,6 +92,21 @@ dt2 %>% tbl_summary()
 
 ```{r, echo=T}
 dt2 %>% tbl_summary(by="EXMD_BZ_YYYY")
+```
+
+`tbl_strata` 함수를 이용하여 두번에 걸쳐 그룹으로 묶을 수 있다. 형식은 **tbl_strata()**를 사용한다. 여러 계층으로 그룹을 묶을 수 있다.
+
+```{r, echo=T}
+dt2 %>% 
+  tbl_strata(
+    strata = Q_PHX_DX_STK,
+    .tbl_fun = 
+      ~ .x %>% 
+      tbl_summary(by=EXMD_BZ_YYYY, missing="no") %>% 
+      add_n() %>% 
+      add_p(),
+    .header = "**{strata}**, N={n}"
+  )
 ```
 
 ## Modifying function arguments
